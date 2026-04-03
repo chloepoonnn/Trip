@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎰 Our First 澳門Trip April 4–5, 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+HK:wght@300;400;500;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
+
+<style>
+:root {
+  --navy:#1a2744;--navy-light:#243158;--gold:#c9952a;--gold-light:#e8b94f;
+  --gold-pale:#f5e6c8;--cream:#faf7f2;--warm-white:#fff9f0;
+  --tile-blue:#2e5f8a;--tile-red:#c0503a;--text-dark:#1a1a2e;
+  --text-mid:#4a4a6a;--text-light:#8a8aaa;
+  --border:rgba(201,149,42,0.2);--shadow:0 4px 24px rgba(26,39,68,0.12);
+  --pink:#F2C4CE;--pink-light:#fce8ed;--pink-dark:#e8a0b0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans HK',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:70px 20px 60px;text-align:center;background:var(--navy)}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(201,149,42,0.07) 0% 25%,transparent 0% 50%);background-size:40px 40px}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--cream))}
+.hero-inner{position:relative;z-index:1;max-width:800px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(201,149,42,0.15);border:1px solid rgba(201,149,42,0.4);color:var(--gold-light);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:20px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(42px,9vw,80px);font-weight:900;color:#fff;line-height:1.05;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.hero h1 em{color:var(--gold-light);font-style:normal}
+.hero-date{color:rgba(255,255,255,0.6);font-size:14px;letter-spacing:3px;text-transform:uppercase;margin-bottom:32px}
+.hero-pills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 強制一行 2 個，兩行排晒 */
+  gap: 8px;
+  margin-top: 15px;
+  max-width: 300px; /* 限制寬度費事太闊 */
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-pill {
+  padding: 6px 8px;
+  font-size: 11px;
+  justify-content: center;
+}
+.hero-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);padding:8px 16px;border-radius:20px;font-size:13px;display:flex;align-items:center;gap:6px}
+
+/* NAV */
+nav{background:var(--navy);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(26,39,68,0.3);border-bottom:1px solid rgba(201,149,42,0.2)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:18px 22px;border:none;background:none;font-family:'Noto Sans HK',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.25s;white-space:nowrap}
+.nav-btn:hover{color:var(--gold-light)}
+.nav-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);font-weight:700}
+
+/* SECTIONS */
+.section{display:none;animation:fadeIn 0.3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.container{max-width:1200px;margin:0 auto;padding:48px 20px}
+.section-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.section-sub{color:var(--text-light);font-size:14px;margin-bottom:32px}
+
+/* OVERVIEW */
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:32px}
+.info-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.info-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.info-card-icon{font-size:32px;margin-bottom:12px}
+.info-card-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text-light);margin-bottom:6px}
+.info-card-value{font-size:18px;font-weight:700;color:var(--navy);line-height:1.3}
+.info-card-sub{font-size:12px;color:var(--text-light);margin-top:4px}
+.alert-box{background:linear-gradient(135deg,#fff8e7,#fff3d4);border:1px solid rgba(201,149,42,0.3);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+.alert-box h3{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(201,149,42,0.1);font-size:13px;color:var(--text-mid)}
+.alert-item:last-child{border-bottom:none}
+.alert-item strong{color:var(--navy)}
+
+/* TIMELINE */
+.day-section{margin-bottom:48px}
+.day-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.day-badge{background:var(--navy);color:var(--gold-light);font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;border-radius:20px;border:1px solid rgba(201,149,42,0.3)}
+.day-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;line-height: 1.2;color:var(--navy);margin-bottom: 4px;}
+.day-sub{font-size:11px;opacity: 0.8;color:var(--text-light);margin-top:4px}
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),var(--tile-blue),var(--gold))}
+.tl-item{position:relative;margin-bottom:20px;background:#fff;border-radius:14px;padding:18px 20px;border:1px solid rgba(26,39,68,0.07);box-shadow:0 2px 12px rgba(26,39,68,0.05);transition:all 0.2s}
+.tl-item:hover{transform:translateX(4px);box-shadow:0 4px 20px rgba(26,39,68,0.1);border-color:var(--border)}
+.tl-dot{position:absolute;left:-31px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid #fff;box-shadow:0 0 0 2px var(--gold)}
+.tl-dot.special{background:var(--tile-red);box-shadow:0 0 0 2px var(--tile-red)}
+.tl-dot.dinner{background:#3a7d52;box-shadow:0 0 0 2px #3a7d52}
+.tl-time{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.tl-name{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.tl-desc{font-size:13px;color:var(--text-mid);line-height:1.5}
+.tl-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tl-tag{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500}
+.tag-transport{background:#e8f4fd;color:#2a5f8a}
+.tag-food{background:#fef3e2;color:#a06820}
+.tag-activity{background:#f0fdf4;color:#3a7d52}
+.tag-hotel{background:#fdf0f8;color:#8a4a7a}
+.tag-warning{background:#fff1f0;color:#c04040}
+.tl-map-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--tile-blue);text-decoration:none;margin-top:8px;font-weight:500;transition:color 0.2s}
+.tl-map-link:hover{color:var(--gold)}
+
+/* LEAFLET MAP */
+#leaflet-map{height:480px;border-radius:16px;overflow:hidden;border:2px solid var(--border);box-shadow:var(--shadow);margin-bottom:20px;position:relative;z-index:1}
+.map-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-mid);background:#fff;border:1px solid rgba(26,39,68,0.08);border-radius:20px;padding:4px 10px}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.map-open-btn{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--gold-light);border:none;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans HK',sans-serif;margin-bottom:16px;transition:opacity 0.2s}
+.map-open-btn:hover{opacity:0.85}
+
+/* LEAFLET POPUP OVERRIDES */
+.leaflet-popup-content-wrapper{border-radius:12px!important;box-shadow:0 8px 24px rgba(26,39,68,0.18)!important;border:1px solid rgba(201,149,42,0.2)!important;padding:0!important}
+.leaflet-popup-content{margin:0!important;min-width:220px;max-width:260px}
+.popup-inner{padding:14px 16px;font-family:'Noto Sans HK',sans-serif}
+.popup-name{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px;line-height:1.3}
+.popup-sig{font-size:12px;color:var(--text-mid);margin-bottom:8px;line-height:1.45}
+.popup-hours{font-size:11px;color:var(--text-mid);margin-bottom:6px}
+.popup-warn{font-size:11px;color:#c04040;padding:4px 8px;background:#fff5f5;border-radius:6px;border-left:2px solid #c04040;margin-bottom:8px;line-height:1.4}
+.popup-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--tile-blue);text-decoration:none;font-weight:600}
+.popup-link:hover{color:var(--gold)}
+.leaflet-marker-icon{border:none!important;background:none!important}
+.marker-pin{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.25);cursor:pointer;transition:transform 0.15s}
+.marker-pin:hover{transform:scale(1.15)}
+
+/* FOOD GRID */
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.food-card{background:#fff;border-radius:14px;padding:20px;border:1px solid rgba(26,39,68,0.07);box-shadow:0 2px 12px rgba(26,39,68,0.04);transition:all 0.25s;display:flex;flex-direction:column}
+.food-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(26,39,68,0.1);border-color:var(--border)}
+.food-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.food-card-emoji{font-size:28px;flex-shrink:0}
+.food-card-name{font-size:15px;font-weight:700;color:var(--navy);line-height:1.3}
+.food-card-catname{font-size:11px;color:var(--text-light);margin-top:2px}
+.food-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.food-tag{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600}
+.r-hk{background:#e8f0fd;color:#2a4f8a}
+.r-taipa{background:#fef0e8;color:#8a4a20}
+.r-cotai{background:#f0e8fd;color:#6a4a8a}
+.c-teahouse{background:#fff8e0;color:#8a7020}
+.c-meal{background:#e8fdf0;color:#206040}
+.c-portuguese{background:#fde8e8;color:#8a2020}
+.c-hotpot{background:#e8f4fd;color:#204870}
+.c-supper{background:#fde8f8;color:#702070}
+.c-bbq{background:#fdf0e8;color:#8a4020}
+.c-bread{background:#f8fde8;color:#507020}
+.c-cafe{background:#e8fdfd;color:#207070}
+.c-dessert{background:#fde8f4;color:#8a2060}
+.c-gelato{background:#e8eafd;color:#2030a0}
+.food-sig{font-size:12px;color:var(--text-mid);line-height:1.5;margin-bottom:10px;flex:1}
+.food-hours{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-mid);padding:8px 10px;background:var(--cream);border-radius:8px;margin-bottom:8px}
+.food-warn{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:#c04040;padding:7px 10px;background:#fff5f5;border-radius:8px;margin-bottom:8px;border-left:2px solid #c04040}
+.food-bottom{margin-top:auto;padding-top:10px;border-top:1px solid rgba(26,39,68,0.06);display:flex;gap:8px;align-items:center}
+.map-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--tile-blue);text-decoration:none;font-weight:600;transition:color 0.2s;flex:1}
+.map-link:hover{color:var(--gold)}
+.map-focus-btn{flex-shrink:0;padding:5px 10px;border-radius:8px;border:1px solid rgba(46,95,138,0.25);background:rgba(46,95,138,0.06);cursor:pointer;font-size:11px;font-weight:600;color:var(--tile-blue);font-family:'Noto Sans HK',sans-serif;transition:all 0.2s}
+.map-focus-btn:hover{background:var(--tile-blue);color:#fff;border-color:var(--tile-blue)}
+.result-count{font-size:13px;color:var(--text-light);margin-bottom:16px}
+
+/* RIBBON */
+.ribbon{position:relative;overflow:hidden}
+.ribbon::after{content:attr(data-ribbon);position:absolute;top:10px;right:-22px;background:var(--tile-red);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 28px;transform:rotate(35deg);text-transform:uppercase}
+
+/* FILTER PANEL */
+.filter-panel{background:#fff;border-radius:14px;padding:16px 20px;border:1px solid var(--border);margin-bottom:16px}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0}
+.filter-row+.filter-row{border-top:1px solid var(--border)}
+.filter-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);min-width:40px}
+.filter-btn{padding:8px 2px;border-radius:20px;border:1px solid rgba(26,39,68,0.15);background:#fff;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-mid);transition:all 0.2s;font-family:'Noto Sans HK',sans-serif;white-space:nowrap}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold)}
+.filter-btn.active{background:var(--navy);color:var(--gold-light);border-color:var(--navy)}
+
+/* PREP */
+.prep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.prep-card{background:#fff;border-radius:16px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.prep-card h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.prep-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(26,39,68,0.05);font-size:13px;color:var(--text-mid)}
+.prep-item:last-child{border-bottom:none}
+.prep-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px}
+
+/* ── MCC LIST (REDESIGN) ─────────────────────────── */
+.mcc-progress{background:#fff;border:1.5px solid var(--pink);border-radius:14px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:16px;font-family:'Nunito',sans-serif}
+.mcc-bar-wrap{flex:1;height:8px;background:var(--pink-light);border-radius:4px;overflow:hidden}
+.mcc-bar{height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-dark));border-radius:4px;transition:width 0.4s ease;width:0%}
+.mcc-progress-text{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;font-family:'Nunito',sans-serif}
+.mcc-reset{padding:6px 14px;border-radius:20px;border:1px solid rgba(26,39,68,0.15);background:#fff;cursor:pointer;font-size:12px;color:var(--text-mid);font-family:'Nunito',sans-serif;transition:all 0.2s}
+.mcc-reset:hover{border-color:var(--pink-dark);color:#c06080}
+
+.mcc-section{margin-bottom:32px}
+.mcc-cat-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--pink-light)}
+.mcc-cat-emoji{font-size:22px}
+.mcc-cat-label{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;color:var(--navy);letter-spacing:0.3px}
+.mcc-cat-count{font-family:'Nunito',sans-serif;font-size:12px;color:var(--text-light);margin-left:auto;background:var(--pink-light);padding:3px 10px;border-radius:20px}
+
+.mcc-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:8px}
+.mcc-item{background:#fff;border:1.5px solid rgba(26,39,68,0.1);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.2s;user-select:none;font-family:'Nunito',sans-serif}
+.mcc-item:hover{border-color:var(--pink);box-shadow:0 2px 10px rgba(242,196,206,0.3)}
+.mcc-item.checked{background:linear-gradient(135deg,#fff5f7,var(--pink-light));border-color:var(--pink)}
+.mcc-checkbox{width:20px;height:20px;border-radius:6px;border:2px solid rgba(26,39,68,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:11px;font-weight:700}
+.mcc-item.checked .mcc-checkbox{background:var(--pink);border-color:var(--pink-dark);color:#8a2040}
+.mcc-label{font-size:11px;font-weight:600;color:var(--text-dark);line-height:1.3}
+.mcc-item.checked .mcc-label{color:#c06080;text-decoration:line-through;opacity:0.7}
+
+/* OVERVIEW REDESIGN */
+.booked-box{background:linear-gradient(135deg,#f0fdf4,#e8fdf0);border:1px solid rgba(58,125,82,0.2);border-left:4px solid #3a7d52;border-radius:14px;padding:20px 24px;margin-bottom:24px}
+.booked-title{font-size:13px;font-weight:700;color:#3a7d52;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.booked-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.booked-item {
+  display: flex;
+  flex-direction: column; /* 令標題同內容分開上下兩行 */
+  align-items: flex-start;
+  gap: 6px; /* 兩行之間嘅間距 */
+  font-size: 13px;
+  color: var(--text-mid);
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(58,125,82,0.15);
+}
+.booked-item span {
+  display: block;
+  line-height: 1.6; 
+  margin-top: 4px;
+}
+/* 額外控制標題字體 */
+.booked-item strong {
+  display: block;
+  color: var(--navy);
+  margin-bottom: 2px;
+}.booked-item strong{color:var(--navy)}
+.day-glance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:24px}
+.day-glance-card{background:#fff;border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.glance-header{background:var(--navy);color:var(--gold-light);padding:14px 20px;font-weight:700;font-size:13px;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.glance-body{padding:16px 20px}
+.glance-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(26,39,68,0.05);font-size:13px;color:var(--text-mid);line-height:1.4}
+.glance-row:last-child{border-bottom:none}
+.glance-time{font-size:11px;font-weight:700;color:var(--gold);min-width:52px;flex-shrink:0;padding-top:1px}
+.glance-dot-special{width:8px;height:8px;border-radius:50%;background:var(--tile-red);flex-shrink:0;margin-top:4px}
+.glance-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px}
+
+/* SUPPER ROUTE BOX */
+.route-box{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border:1px solid rgba(46,95,138,0.2);border-left:4px solid var(--tile-blue);border-radius:12px;padding:16px 18px;margin-top:12px}
+.route-box-title{font-size:12px;font-weight:700;color:var(--tile-blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.route-step{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(46,95,138,0.1);font-size:13px;color:var(--text-mid)}
+.route-step:last-child{border-bottom:none;padding-bottom:0}
+.route-num{background:var(--tile-blue);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.route-step strong{color:var(--text-dark)}
+.route-note{font-size:12px;color:var(--tile-blue);background:rgba(46,95,138,0.08);border-radius:8px;padding:8px 12px;margin-top:10px;line-height:1.5}
+
+@media(max-width:640px){
+  .hero{padding:50px 16px 40px}
+  .container{padding:32px 16px}
+  .section-title{font-size:26px}
+  .food-grid{grid-template-columns:1fr}
+  #leaflet-map{height:360px}
+  .timeline{padding-left:28px}
+  .mcc-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">✈️ HK → Macau Road Trip</div>
+    <h1>澳門<em>之旅</em></h1>
+    <div class="hero-date">April 4 – 5, 2025 &nbsp;·&nbsp; 2日1夜</div>
+    <div class="hero-pills">
+      <div class="hero-pill">🚢 早班船出發</div>
+      <div class="hero-pill">🏨 巴黎人 Check-in 3pm</div>
+      <div class="hero-pill">🎤 演唱會 新濠影滙 7:30pm</div>
+      <div class="hero-pill">🚢 回程 22:00</div>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('overview',this)">🗺️ 行程總覽</button>
+    <button class="nav-btn" onclick="showSection('timeline',this)">📅 每日行程</button>
+    <button class="nav-btn" onclick="showSection('map',this)">📍 地圖 & 美食</button>
+    <button class="nav-btn" onclick="showSection('prep',this)">⚠️ 行前準備</button>
+    <button class="nav-btn" onclick="showSection('mcc',this)">🧳 MC List</button>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="section active" id="section-overview">
+<div class="container">
+  <div class="section-title">行程總覽</div>
+  <div class="section-sub">April 4–5, 2025 · 2日1夜澳門之旅</div>
+
+  <div class="booked-box">
+    <div class="booked-title">✅ 已確認 / 已預訂</div>
+    <div class="booked-grid"> 
+      
+      <div class="booked-item">🚢 <span><strong>船飛</strong> 去程 4月4日 10:30 香港→外港 <br> 返程 4月5日 22:00 氹仔→香港</span></div>
+      <div class="booked-item">🍲 <span><strong>贏到粥</strong> 4月4日 4:30pm（記得準時）</span></div>
+      <div class="booked-item">🏨 <span><strong>巴黎人 The Parisian</strong> Check-in 3pm / Check-out 11am</span></div>
+    </div>
+  </div>
+
+  <div class="day-glance-grid">
+    <div class="day-glance-card">
+      <div class="glance-header">📅 DAY 1 &nbsp;·&nbsp; 4月4日（五）清明節假期</div>
+      <div class="glance-body">
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">10:30am</span>中環碼頭搵林大姐拎去程飛，11:00am 上船</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">12:30pm</span>新鴻發美食午餐（⚠️ 18:00關門）</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">2:00pm</span>大三巴掃街 — cotiz泡芙、KEICA Bagel、PANPAN、Goat Bakers</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">3pm</span>巴黎人 Check-in，休息備戰</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">4:30pm</span>🍲 贏到粥晚餐（已訂）</div></div>
+        <div class="glance-row"><div class="glance-dot-special"></div><div><span class="glance-time">7:30pm</span>🎤 演唱會 — 新濠影滙 Studio City</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">~9:30pm</span>hc去買宵：華麗燒烤 + 六記粥麵</div></div>
+      </div>
+    </div>
+    <div class="day-glance-card">
+      <div class="glance-header">📅 DAY 2 &nbsp;·&nbsp; 4月5日（六）</div>
+      <div class="glance-body">
+        <div class="glance-row"><div class="glance-dot-special"></div><div><span class="glance-time">9:30am</span>Celeste 冰火葡撻（限量50個！去早啲）</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">10am</span>氹仔掃街</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">11am</span>巴黎人 Check-out（行李寄存）</div></div>
+        <div class="glance-row"><div class="glance-dot-special"></div><div><span class="glance-time">12:30pm</span>⭐ O Castiço 米芝蓮午餐（⚠️ 記得訂位！只收現金）</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">下午</span>PANPAN + VALUN 華聯茶葉手信 + Single Origin咖啡</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">6:30pm</span>晚餐 — 豬骨煲（澳門半島）</div></div>
+        <div class="glance-row"><div class="glance-dot"></div><div><span class="glance-time">~8:30pm</span>返巴黎人拎行李 → 氹仔碼頭</div></div>
+        <div class="glance-row"><div class="glance-dot-special"></div><div><span class="glance-time">22:00</span>🚢 船返香港</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <h3>⚠️ 重要提示（出發前必讀）</h3>
+    <div class="alert-item">💡 <span><strong>eSIM</strong> — klook 買eSIM</span></div>
+    <div class="alert-item">🍦 <span><strong>Celeste 冰火葡撻</strong> — 每日限量50個，週三休息，9:30am 要到！</span></div>
+    <div class="alert-item">🥖 <span><strong>大利來記豬扒包</strong> — 下午約3:30出爐，售完即止</span></div>
+    <div class="alert-item">⭐ <span><strong>O Castiço（米芝蓮）</strong> — 週四休息、只收現金、必須預訂</span></div>
+    <div class="alert-item">🍮 <span><strong>cotiz 泡芙</strong> — 週三休息，日日售罄，早去！</span></div>
+    <div class="alert-item">🍚 <span><strong>贏到粥 Wasabi手撕雞</strong> — 已WhatsApp預訂 +853 2896 7899</span></div>
+    <div class="alert-item">🍳 <span><strong>新鴻發美食</strong> — 18:00關門，無晚市！</span></div>
+    <div class="alert-item">🥐 <span><strong>Goat Bakers</strong> — 限量出爐，售完即止</span></div>
+    <div class="alert-item">🚢 <span><strong>4月4日清明節假期</strong> — 碼頭人多，預留時間</span></div>
+  </div>
+</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="section" id="section-timeline">
+<div class="container">
+  <div class="section-title">每日行程</div>
+  <div class="section-sub">建議行程順序，可按喜好調整</div>
+
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-badge">DAY 1</div>
+      <div><div class="day-title">4月4日（五）抵澳 + 演唱會</div><div class="day-sub">中環出發 → 澳門半島探索 → Check-in → 晚餐 → 演唱會 → 宵夜</div></div>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item"><div class="tl-dot special"></div><div class="tl-time">10:30am</div><div class="tl-name">🚢 中環碼頭 — 搵林大姐拎去程飛</div><div class="tl-desc">中環港澳碼頭搵林大姐拿去程船票，確認好，11:00am 準時上船！4月4日係清明節假期，碼頭人多，早啲到。</div><div class="tl-tags"><span class="tl-tag tag-transport">🎫 拎去程飛</span><span class="tl-tag tag-warning">⚠️ 清明假期人多</span></div><a class="tl-map-link" href="https://maps.app.goo.gl/中環港澳碼頭" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00am</div><div class="tl-name">🛳️ 上船出發</div><div class="tl-desc">船程約75分鐘，~12:15pm 抵達澳門外港碼頭，入境後的士/穿梭巴士去澳門半島。</div><div class="tl-tags"><span class="tl-tag tag-transport">🚢 渡輪 ~75分鐘</span></div></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:30pm</div><div class="tl-name">🍳 午餐 — 新鴻發美食</div><div class="tl-desc">超厚法蘭西多士（爆漿花生醬）、乾炒牛肉通粉、豬扒芝士菠蘿包。18:00關門，今日唯一機會！</div><div class="tl-tags"><span class="tl-tag tag-food">☕ 茶餐廳</span><span class="tl-tag tag-warning">⚠️ 18:00關門</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/新鴻發美食+澳門+三盞燈" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">2:00pm</div><div class="tl-name">🥖 大三巴一帶掃街</div><div class="tl-desc">大三巴牌坊打卡 → KEICA Bagel → PANPAN丹麥可頌 → Goat Bakers限量麵包 → cotiz泡芙。⚠️ 2:45pm 前要出發坐的士去路氹城！</div><div class="tl-tags"><span class="tl-tag tag-food">🥖 烘焙掃街</span><span class="tl-tag tag-warning">⚠️ cotiz日日售罄，早去！</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/大三巴牌坊+澳門" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">3:00pm</div><div class="tl-name">🏨 巴黎人 Check-in + 休息</div><div class="tl-desc">坐的士去路氹城（約20分鐘），Check-in，放低行李，梳洗休息備戰演唱會！</div><div class="tl-tags"><span class="tl-tag tag-hotel">🏨 住宿</span><span class="tl-tag tag-transport">🚕 的士去路氹城 ~20分鐘</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/The+Parisian+Macao" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot dinner"></div><div class="tl-time">4:30pm</div><div class="tl-name">🍲 晚餐 — 贏到粥（已預訂）</div><div class="tl-desc">卜卜蜆、Wasabi手撕雞、椒鹽粟米、冬瓜粥。4:30pm 已book，準時到！食完返酒店換衫出發去演唱會。</div><div class="tl-tags"><span class="tl-tag tag-food">🍲 晚餐</span><span class="tl-tag tag-activity">✅ 已預訂</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/贏到粥+澳門" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot special"></div><div class="tl-time">7:30pm</div><div class="tl-name">🎤 演唱會 — 新濠影滙 Studio City</div><div class="tl-desc">7:00pm 出發。路氹城演唱會前交通繁忙，可坐路氹城免費穿梭巴士或的士去 Studio City（約5分鐘）。</div><div class="tl-tags"><span class="tl-tag tag-activity">🎤 演唱會</span><span class="tl-tag tag-warning">⚠️ 7:00pm 出發</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/Studio+City+Macau" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">~9:30pm（演唱會進行中）</div><div class="tl-name">🛵 宵夜採購路線（你去，mm 繼續留低睇演唱會）</div><div class="tl-desc">目標：華麗燒烤 + 六記粥麵，估計1.5小時搞掂，演唱會完 mm 坐 Studio City 穿梭巴士返巴黎人等你。</div>
+        <div class="route-box">
+          <div class="route-box-title">🗺️ 採購路線</div>
+          <div class="route-step"><div class="route-num">1</div><div><strong>Studio City → 澳門半島</strong><br>的士出發，約20-25分鐘，車費約 MOP$60-80</div></div>
+          <div class="route-step"><div class="route-num">2</div><div><strong>華麗燒烤</strong>（荷蘭園一帶）<br>先落單，等燒烤約15分鐘。多叫幾串！<br><a class="tl-map-link" href="https://www.google.com/maps/search/華麗燒烤+澳門" target="_blank">📍 Google Maps</a></div></div>
+          <div class="route-step"><div class="route-num">3</div><div><strong>六記粥麵</strong>（步行約5-8分鐘）<br>叫粥/麵外賣，快出，唔使等太耐。<br><a class="tl-map-link" href="https://www.google.com/maps/search/六記粥麵+澳門" target="_blank">📍 Google Maps</a></div></div>
+          <div class="route-step"><div class="route-num">4</div><div><strong>返巴黎人</strong><br>的士返路氹城，約25分鐘，車費約 MOP$70-90。mm 坐 Studio City 免費巴士返酒店等你。</div></div>
+          <div class="route-note">⏱️ 全程估計 1.5小時。9:30pm 出發，11pm 前返到。<br>💡 mm：演唱會完直接坐 Studio City → The Parisian 免費穿梭巴士返酒店。</div>
+        </div>
+      <div class="tl-tags" style="margin-top:10px"><span class="tl-tag tag-food">🌙 宵夜外賣</span><span class="tl-tag tag-transport">🚕 的士 x2</span></div></div>
+
+    </div>
+  </div>
+
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-badge">DAY 2</div>
+      <div><div class="day-title">4月5日（六）氹仔舊城 + 回港</div><div class="day-sub">早去搶限量葡撻 → 甜點掃街 → 11am Check-out → 米芝蓮午餐 → 豬扒包 → 回港</div></div>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item"><div class="tl-dot special"></div><div class="tl-time">9:30am</div><div class="tl-name">🍦 Celeste 冰火葡撻 — 限量先到先得！</div><div class="tl-desc">每日限量50個，週三休息。Check out 前先衝去排，唔去就冇！氹仔飛能便度街21號。</div><div class="tl-tags"><span class="tl-tag tag-food">🍦 甜點</span><span class="tl-tag tag-warning">⚠️ 限量50個，去早啲！</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/Celeste+943+the+Porte+Macau" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:00am</div><div class="tl-name">🍰 氹仔舊城甜點掃街</div><div class="tl-desc">曼撻格利亞葡撻 → Just Go Gelato麻糬包 → 甘利來沙翁 → 澤賢記流心雞蛋仔 → 檸檬車露意大利手拉雪糕。打卡為主，淺嚐即可，留肚食午餐！</div><div class="tl-tags"><span class="tl-tag tag-food">🍰 甜點掃街</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/官也街+氹仔+澳門" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00am</div><div class="tl-name">🏨 巴黎人 Check-out</div><div class="tl-desc">退房，行李寄存酒店大堂，輕裝繼續下午行程。</div><div class="tl-tags"><span class="tl-tag tag-hotel">🏨 退房</span></div></div>
+
+      <div class="tl-item"><div class="tl-dot special"></div><div class="tl-time">12:30pm</div><div class="tl-name">⭐ 午餐 — O Castiço（米芝蓮）</div><div class="tl-desc">章魚飯、焗鴨飯、馬介休球。4月5日係週六正常營業。⚠️ 只收現金，必須提前預訂！</div><div class="tl-tags"><span class="tl-tag tag-food">🍽️ 葡國菜</span><span class="tl-tag tag-warning">⚠️ 只收現金，必須預訂</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/O+Castico+Taipa+Macau" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">2:30pm</div><div class="tl-name">🥖 PANPAN + VALUN 華聯茶葉手信</div><div class="tl-desc">PANPAN 丹麥可頌、香蕉拖肥批（大三巴一帶）。再去 VALUN 華聯茶葉買茶葉手信，mm 必去！十月初五街。</div><div class="tl-tags"><span class="tl-tag tag-food">🥐 Pastry</span><span class="tl-tag tag-activity">🛍️ 手信</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/PANPAN+澳門+草堆街" target="_blank">📍 PANPAN</a> &nbsp;<a class="tl-map-link" href="https://www.google.com/maps/search/華聯茶葉+澳門" target="_blank">📍 VALUN</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">4:30pm</div><div class="tl-name">☕ 下午茶 — Single Origin</div><div class="tl-desc">亞洲Top 20精品咖啡，Gold Autumn栗子咖啡、Pistachio開心果咖啡。荷蘭園二馬路19號。⚠️ 週二休息。</div><div class="tl-tags"><span class="tl-tag tag-food">☕ 精品咖啡</span></div><a class="tl-map-link" href="https://maps.app.goo.gl/BjfRWyNCqh22rHwe9" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot dinner"></div><div class="tl-time">6:30pm</div><div class="tl-name">🍲 晚餐 — 豬骨煲</div><div class="tl-desc">台山豬骨煲美食 或 建華新村豬骨煲（兩間都係澳門半島），湯底濃郁，食完暖笠笠再返酒店拎行李。</div><div class="tl-tags"><span class="tl-tag tag-food">🍲 晚餐</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/台山豬骨煲+澳門" target="_blank">📍 台山豬骨煲</a> &nbsp;<a class="tl-map-link" href="https://www.google.com/maps/search/建華新村豬骨煲+澳門" target="_blank">📍 建華新村</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">8:30pm</div><div class="tl-name">🏨 返巴黎人拎行李</div><div class="tl-desc">的士從澳門半島返路氹城巴黎人取寄存行李，約20-25分鐘。</div><div class="tl-tags"><span class="tl-tag tag-transport">🚕 的士 ~25分鐘</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/The+Parisian+Macao" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">9:30pm</div><div class="tl-name">🚢 前往氹仔客運碼頭</div><div class="tl-desc">從巴黎人坐的士去氹仔碼頭，約10分鐘。預留時間check-in行李，22:00 準時開船。</div><div class="tl-tags"><span class="tl-tag tag-transport">🚕 的士 ~10分鐘</span></div><a class="tl-map-link" href="https://www.google.com/maps/search/氹仔客運碼頭+澳門" target="_blank">📍 Google Maps</a></div>
+
+      <div class="tl-item"><div class="tl-dot special"></div><div class="tl-time">22:00</div><div class="tl-name">🚢 船返香港</div><div class="tl-desc">氹仔 → 香港，約60-75分鐘。豬扒包帶上船食！</div><div class="tl-tags"><span class="tl-tag tag-transport">🚢 返港</span></div></div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MAP + FOOD MERGED -->
+<div class="section" id="section-map">
+<div class="container">
+  <div class="section-title">地圖 & 美食</div>
+  <div class="section-sub">三重篩選：地區 × 類別 × 時段 · 點擊 Pin 查看詳情 + 開 Google Maps</div>
+
+  <div class="filter-panel">
+    <div class="filter-row">
+      <span class="filter-label">地區</span>
+      <button class="filter-btn active" onclick="setMapFilter('region','all',this)">全部</button>
+      <button class="filter-btn" onclick="setMapFilter('region','hk',this)">🏙️ 澳門半島</button>
+      <button class="filter-btn" onclick="setMapFilter('region','taipa',this)">🏘️ 氹仔舊城</button>
+      <button class="filter-btn" onclick="setMapFilter('region','cotai',this)">🎰 路氹城</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">類別</span>
+      <button class="filter-btn active" onclick="setMapFilter('cat','all',this)">全部</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','teahouse',this)">☕ 茶餐廳</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','meal',this)">🍜 正餐/粥麵</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','portuguese',this)">🍽️ 葡國菜</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','hotpot',this)">🍲 火鍋/煲</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','supper',this)">🌙 宵夜/小食</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','bbq',this)">🔥 燒烤</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','bread',this)">🥖 麵包/Bagel</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','cafe',this)">☕ Cafe/飲品</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','dessert',this)">🍰 甜點</button>
+      <button class="filter-btn" onclick="setMapFilter('cat','gelato',this)">🍦 Gelato</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">時段</span>
+      <button class="filter-btn active" onclick="setMapFilter('time','all',this)">全部</button>
+      <button class="filter-btn" onclick="setMapFilter('time','breakfast',this)">🌅 早餐</button>
+      <button class="filter-btn" onclick="setMapFilter('time','lunch',this)">☀️ 午餐</button>
+      <button class="filter-btn" onclick="setMapFilter('time','afternoon',this)">🌆 下午茶</button>
+      <button class="filter-btn" onclick="setMapFilter('time','dinner',this)">🌙 晚餐</button>
+      <button class="filter-btn" onclick="setMapFilter('time','supper',this)">🌃 宵夜</button>
+    </div>
+  </div>
+
+  <div class="map-legend" id="map-legend"></div>
+  <div id="leaflet-map"></div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+    <div class="result-count" id="map-count" style="margin-bottom:0"></div>
+    <button class="map-open-btn" onclick="window.open('https://www.google.com/maps/search/澳門+美食','_blank')">🗺️ 喺 Google Maps 搵全部</button>
+  </div>
+  <div id="map-pins-grid" class="food-grid"></div>
+</div>
+</div>
+
+<!-- PREP -->
+<div class="section" id="section-prep">
+<div class="container">
+  <div class="section-title">行前準備</div>
+  <div class="section-sub">出發前必知事項</div>
+  <div class="prep-grid">
+    <div class="prep-card">
+      <h3>🚢 船票資訊</h3>
+      <div class="prep-item"><div class="prep-dot"></div><div>中環 → 澳門外港碼頭，約60-75分鐘</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>建議提前網上購票：TurboJET / 金光飛航</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>4月4日係清明節假期！</strong> 一定要早訂！</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>帶備回鄉證 / 護照</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>回程可選氹仔碼頭，較近酒店</div></div>
+    </div>
+    <div class="prep-card">
+      <h3>📞 需要預訂嘅地方</h3>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>O Castiço</strong> — 必須預訂，只收現金</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>常喜 Cafe Cheri</strong> — 建議提前訂位，人均$300-500</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>贏到粥 Wasabi手撕雞</strong> — WhatsApp：+853 2896 7899</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>旺德福火鍋</strong> — WhatsApp：+853 6394 1567</div></div>
+    </div>
+    <div class="prep-card">
+      <h3>⚠️ 限量 / 特別注意</h3>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>大利來記</strong> — 下午3:30出爐，售完即止</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>Celeste冰火葡撻</strong> — 每日限量50個</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>cotiz泡芙</strong> — 日日售罄，週三休息</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>Goat Bakers</strong> — 限量，售完即止</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div><strong>榮記/明記</strong> — 走鬼檔，無固定時間，只收現金</div></div>
+    </div>
+    <div class="prep-card">
+      <h3>💡 實用貼士</h3>
+      <div class="prep-item"><div class="prep-dot"></div><div>eSIM klook選購</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>澳門幣(MOP)，港幣1:1通用</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>賭場穿梭巴士免費，連接各大景點</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>的士起錶約MOP$19，市區內短途方便</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>演唱會前check新濠影滙穿梭巴士時間表</div></div>
+      <div class="prep-item"><div class="prep-dot"></div><div>4月4日公假，部分食店可能人多或特別時間</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MCC LIST -->
+<div class="section" id="section-mcc">
+<div class="container">
+  <div class="section-title">🧳 MC List</div>
+  <div class="section-sub">出發前 Check List — 點擊打勾！</div>
+  <div class="mcc-progress">
+    <div class="mcc-bar-wrap"><div class="mcc-bar" id="mcc-bar"></div></div>
+    <div class="mcc-progress-text" id="mcc-progress-text">0 / 30 packed</div>
+    <button class="mcc-reset" onclick="resetMCC()">重置</button>
+  </div>
+  <div id="mcc-sections"></div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+<script>
+// ── DATA ──────────────────────────────────────
+const PLACES = [
+  {id:1,name:'新鴻發美食',emoji:'🍳',cat:'teahouse',region:'hk',time:['breakfast','lunch'],sig:'超厚法蘭西多士（爆漿花生醬）、乾炒牛肉通粉、豬扒芝士菠蘿包',hours:'每日 06:00–18:00',warn:'無晚市，18:00關門！假日大排長龍',addr:'賈伯樂提督街55號A（三盞燈）',map:'https://www.google.com/maps/search/新鴻發美食+澳門+三盞燈',lat:22.2130,lng:113.5469},
+  {id:2,name:'新英記(巷仔)咖啡麵食',emoji:'☕',cat:'teahouse',region:'hk',time:['breakfast','lunch'],sig:'炭烤魚餅包、豬扒包、港式奶茶，米芝蓮街頭美食推介',hours:'07:00–17:30',warn:null,addr:'草堆街84號美麗閣地下A舖',map:'https://www.google.com/maps/search/新英記+巷仔+澳門',lat:22.2024,lng:113.5416},
+  {id:3,name:'六樓後座冰室',emoji:'🧇',cat:'teahouse',region:'hk',time:['breakfast','lunch'],sig:'六樓磚飯咖喱雞、港式鴛鴦、炭燒咖啡',hours:'每日 07:00–19:00',warn:null,addr:'連勝馬路一帶',map:'https://www.google.com/maps/search/六樓後座冰室+澳門',lat:22.2027,lng:113.5449},
+  {id:4,name:'世記咖啡（崗頂店）',emoji:'☕',cat:'teahouse',region:'hk',time:['breakfast','lunch'],sig:'炭燒瓦煲咖啡、厚蛋豬扒包、花生奶油方塊，米芝蓮推介',hours:'週一至五 07:00–18:00 / 週六 07:00–12:00',warn:'週日休息！週六只開到12:00',addr:'崗頂吉祥里地下',map:'https://www.google.com/maps/search/世記咖啡+崗頂+澳門',lat:22.2014,lng:113.5438},
+  {id:5,name:'世記咖啡（氹仔外賣店）',emoji:'☕',cat:'teahouse',region:'taipa',time:['breakfast','lunch'],sig:'炭燒瓦煲咖啡、厚蛋豬扒包',hours:'每日 10:30–18:30',warn:'週一休息！',addr:'消防局前地1號',map:'https://www.google.com/maps/search/世記咖啡+氹仔+澳門',lat:22.1535,lng:113.5558},
+  {id:6,name:'一哥美食 - 水蟹粥',emoji:'🦀',cat:'meal',region:'hk',time:['dinner','supper'],sig:'水蟹粥、椒鹽九肚魚、現製腸粉、乾炒牛河',hours:'每日 19:00–03:30',warn:'只開晚上！',addr:'黑沙環區',map:'https://www.google.com/maps/search/一哥美食+水蟹粥+澳門+黑沙環',lat:22.2094,lng:113.5496},
+  {id:7,name:'張記粥麵',emoji:'🍜',cat:'meal',region:'hk',time:['breakfast','lunch','dinner'],sig:'傳統粥麵，家庭式粥底',hours:'約 09:00–21:00',warn:null,addr:'議事亭附近',map:'https://www.google.com/maps/search/張記粥麵+澳門',lat:22.2013,lng:113.5459},
+  {id:8,name:'好友味撈汁',emoji:'🦞',cat:'meal',region:'hk',time:['lunch','dinner'],sig:'撈汁海鮮小食，澳門特色食法',hours:'約 11:30–20:00',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/好友味撈汁+澳門',lat:22.1987,lng:113.5384},
+  {id:9,name:'友興小食',emoji:'🍚',cat:'meal',region:'hk',time:['breakfast','lunch'],sig:'廣東粥麵，地道早餐正餐',hours:'07:00–18:00',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/友興小食+澳門',lat:22.2002,lng:113.5374},
+  {id:10,name:'贏到粥 Yeng Dou Jok',emoji:'🍚',cat:'meal',region:'taipa',time:['dinner','supper'],sig:'卜卜蜆、Wasabi手撕雞（需預訂）、椒鹽粟米、冬瓜粥',hours:'每日 16:30–02:00',warn:'Wasabi手撕雞需提前WhatsApp預訂：+853 2896 7899',addr:'下環媽閣豐順新邨第三M,K舖',map:'https://www.google.com/maps/search/贏到粥+澳門',lat:22.1882,lng:113.5313},
+  {id:11,name:'榮記小食',emoji:'🍢',cat:'supper',region:'hk',time:['supper'],sig:'煎釀三寶（矮瓜/青椒/豆腐）、炸雲吞、炸紅腸、炸雞翼，即炸即食',hours:'傍晚至深夜（無固定）',warn:'走鬼檔！只收現金，無座位',addr:'新馬路一帶',map:'https://www.google.com/maps/search/榮記小食+澳門+新馬路',lat:22.1960,lng:113.5408},
+  {id:12,name:'明記牛雜小食',emoji:'🍢',cat:'supper',region:'hk',time:['supper'],sig:'牛雜、牛根、牛肚、咖喱滷汁，MOP$50/80/100',hours:'約傍晚開始（無固定）',warn:'只收現金，無座位',addr:'新馬路附近',map:'https://www.google.com/maps/search/明記牛雜+澳門',lat:22.1960,lng:113.5454},
+  {id:13,name:'強記熟食',emoji:'🍽️',cat:'supper',region:'hk',time:['dinner','supper'],sig:'家常熟食宵夜小菜',hours:'傍晚至深夜',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/強記熟食+澳門',lat:22.2090,lng:113.5448},
+  {id:14,name:'滋味生煎',emoji:'🥟',cat:'supper',region:'hk',time:['lunch','supper'],sig:'上海式生煎包，皮脆餡多',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/滋味生煎+澳門',lat:22.1960,lng:113.5408},
+  {id:15,name:'夜燒燒烤店',emoji:'🔥',cat:'bbq',region:'hk',time:['dinner','supper'],sig:'夜間燒烤，各式串燒',hours:'傍晚至深夜',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/夜燒燒烤+澳門',lat:22.2102,lng:113.5518},
+  {id:16,name:'華麗燒烤',emoji:'🔥',cat:'bbq',region:'hk',time:['dinner','supper'],sig:'各式串燒，澳門老牌燒烤',hours:'傍晚至深夜',warn:null,addr:'Edificio Pou Hong, 60 R. de Marques de Oliveira',map:'https://www.google.com/maps/search/華麗燒烤+澳門',lat:22.2071,lng:113.5447},
+  {id:17,name:'人間煙火湘西小串燒烤',emoji:'🔥',cat:'bbq',region:'hk',time:['dinner','supper'],sig:'湘西風味串燒，宵夜勝地',hours:'傍晚至深夜',warn:null,addr:'新口岸店',map:'https://www.google.com/maps/search/人間煙火湘西小串燒烤+澳門',lat:22.1921,lng:113.5476},
+  {id:18,name:'ALBERGUE 1601',emoji:'🏛️',cat:'portuguese',region:'hk',time:['lunch','dinner'],sig:'葡式正餐，百年歷史建築環境打卡',hours:'每日 12:00–15:00 / 17:30–22:00',warn:'建議訂位',addr:'荷蘭園望德堂瘋堂斜巷8號',map:'https://www.google.com/maps/search/Albergue+1601+Macau',lat:22.1973,lng:113.5444},
+  {id:19,name:'O Castiço',emoji:'⭐',cat:'portuguese',region:'taipa',time:['lunch','dinner'],sig:'米芝蓮必比登推介，章魚飯、焗鴨飯、馬介休球、燒乳豬',hours:'週一至三、五至日 11:00–23:00',warn:'週四休息！只收現金！必須預訂',addr:'氹仔舊城區',map:'https://www.google.com/maps/search/O+Castico+Taipa+Macau',lat:22.1527,lng:113.5558},
+  {id:20,name:'常喜 Cafe Cheri',emoji:'🍽️',cat:'portuguese',region:'taipa',time:['lunch','dinner'],sig:'法式油焗鴨腿、白煙三文魚意粉、蘋果木熏八爪魚',hours:'每日 12:00–22:00',warn:'需提前訂位，人均約$300-500',addr:'氹仔舊城區',map:'https://www.google.com/maps/search/Cafe+Cheri+Taipa+Macau',lat:22.1527,lng:113.5558},
+  {id:21,name:'葡富軒 AMORA',emoji:'🍽️',cat:'portuguese',region:'taipa',time:['lunch','dinner'],sig:'蟹肉釀蟹蓋$188、椰汁非洲雞$190、葡式海鮮扁麵$228',hours:'待確認',warn:'建議訂位',addr:'客商街31號地舖',map:'https://www.google.com/maps/search/葡富軒+AMORA+澳門',lat:22.1535,lng:113.5560},
+  {id:22,name:'馬德拉葡國餐廳',emoji:'🍽️',cat:'portuguese',region:'taipa',time:['lunch','dinner'],sig:'葡國雞酥皮包、葡式乳豬、馬介休球',hours:'待確認',warn:null,addr:'氹仔舊城區',map:'https://www.google.com/maps/search/馬德拉葡國餐廳+澳門',lat:22.1535,lng:113.5555},
+  {id:23,name:'旺德福火鍋（氹仔店）',emoji:'🍲',cat:'hotpot',region:'taipa',time:['lunch','dinner'],sig:'旺旺黃金多多蜆$288（熊仔牛油湯底）、麻辣三寶、紅燒妙齡鴿$78',hours:'週一至五 17:00–01:00 / 週六至日 11:00–02:00',warn:'建議WhatsApp訂位：+853 6394 1567',addr:'巴波沙總督街30C-30G號',map:'https://www.google.com/maps/search/旺德福火鍋+氹仔+澳門',lat:22.1535,lng:113.5568},
+  {id:24,name:'台山豬骨煲美食',emoji:'🍲',cat:'hotpot',region:'hk',time:['lunch','dinner'],sig:'台山風味豬骨煲，湯底濃郁',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/台山豬骨煲+澳門',lat:22.2131,lng:113.5469},
+  {id:25,name:'建華新村豬骨煲',emoji:'🍲',cat:'hotpot',region:'hk',time:['lunch','dinner'],sig:'本地人愛去嘅豬骨煲老字號',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/建華新村豬骨煲+澳門',lat:22.2086,lng:113.5537},
+  {id:26,name:'權昌新順發火鍋飯店',emoji:'🦞',cat:'hotpot',region:'hk',time:['lunch','dinner'],sig:'泰式海鮮大聯盟、冰鎮豬手',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/權昌新順發火鍋+澳門',lat:22.2071,lng:113.5447},
+  {id:27,name:'Single Origin',emoji:'☕',cat:'cafe',region:'hk',time:['afternoon'],sig:'亞洲Top 20精品咖啡，Gold Autumn栗子咖啡、Pistachio開心果咖啡',hours:'每日 12:00–20:00',warn:'週二休息！',addr:'荷蘭園二馬路19號通發大廈地下',map:'https://maps.app.goo.gl/BjfRWyNCqh22rHwe9',lat:22.1970,lng:113.5462},
+  {id:28,name:'Two Moons 映月',emoji:'🌙',cat:'cafe',region:'hk',time:['afternoon','dinner'],sig:'手沖咖啡（3款tasting cup體驗）、Earl Grey Roll Cake，夜晚whisky cocktail',hours:'週一至六 12:00–02:00 / 週日 13:00–02:00',warn:null,addr:'伯多祿局長街32-A號（葡國領事館對面）',map:'https://www.google.com/maps/search/Two+Moons+Macau',lat:22.1947,lng:113.5438},
+  {id:29,name:'大欖茶 Dada Lemon Tea',emoji:'🍋',cat:'cafe',region:'hk',time:['afternoon'],sig:'澳門人氣手工檸檬茶專門店',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/大欖茶+Dada+Lemon+Tea+澳門',lat:22.2108,lng:113.5552},
+  {id:30,name:'DADA TEA',emoji:'🧋',cat:'cafe',region:'hk',time:['afternoon'],sig:'創意奶茶，The Place內',hours:'待確認',warn:null,addr:'The Place 內，澳門半島',map:'https://www.google.com/maps/search/DADA+TEA+澳門',lat:22.1981,lng:113.5393},
+  {id:31,name:'The Place（內有DADA YEA）',emoji:'🏬',cat:'cafe',region:'hk',time:['lunch','afternoon','dinner'],sig:'綜合食街，內有DADA YEA創意飲品',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/The+Place+Macau',lat:22.1981,lng:113.5393},
+  {id:32,name:'茶理宜世',emoji:'🍵',cat:'cafe',region:'hk',time:['afternoon'],sig:'特色茶飲',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/茶理宜世+澳門',lat:22.1939,lng:113.5429},
+  {id:33,name:'茶茶巫 cháchāwū',emoji:'🧋',cat:'cafe',region:'hk',time:['afternoon'],sig:'創意茶飲，澳門旗艦店',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/茶茶巫+澳門',lat:22.1930,lng:113.5416},
+  {id:34,name:'十十八十八制（澳門半島）',emoji:'🍵',cat:'cafe',region:'hk',time:['afternoon'],sig:'茶凍甜品茶飲',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/十十八十八制+澳門',lat:22.1973,lng:113.5377},
+  {id:35,name:'十十八十八制（氹仔）',emoji:'🍵',cat:'cafe',region:'taipa',time:['afternoon'],sig:'茶凍甜品茶飲，氹仔分店',hours:'待確認',warn:null,addr:'氹仔',map:'https://www.google.com/maps/search/十十八十八制+澳門+氹仔',lat:22.1960,lng:113.5380},
+  {id:36,name:'VALUN 華聯茶葉',emoji:'🍃',cat:'cafe',region:'hk',time:['afternoon'],sig:'百年老牌茶葉手信，各款名茶',hours:'待確認',warn:null,addr:'十月初五街一帶',map:'https://www.google.com/maps/search/華聯茶葉+澳門+十月初五街',lat:22.1895,lng:113.5362},
+  {id:37,name:'Acrylic.mo',emoji:'☕',cat:'cafe',region:'hk',time:['afternoon'],sig:'Cafe + 飲品 + 酥皮Puff，日式風格打卡',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/Acrylic.mo+Macau',lat:22.1961,lng:113.5454},
+  {id:38,name:'Momokawa（銀河店）',emoji:'☕',cat:'cafe',region:'cotai',time:['afternoon'],sig:'雪玉拿鐵（糙米奶雲頂奶泡）、青蘋果抹茶湯力，創意咖啡',hours:'待確認',warn:null,addr:'銀河商場內',map:'https://www.google.com/maps/search/Momokawa+澳門+銀河',lat:22.1540,lng:113.5680},
+  {id:39,name:'打鐵豆花',emoji:'🫘',cat:'dessert',region:'hk',time:['afternoon'],sig:'打鐵豆花$38（鐵人碗裝刨冰+紅豆）、微笑爆餡雞蛋仔$36（布蕾/麻薯）',hours:'約 12:00–21:00',warn:'雞蛋仔限量需等40分鐘，早去！',addr:'荷蘭園瘋堂新街20號',map:'https://www.google.com/maps/search/打鐵豆花+澳門',lat:22.1961,lng:113.5448},
+  {id:40,name:'HANO Kakigōri',emoji:'🍧',cat:'dessert',region:'hk',time:['afternoon'],sig:'超大份日式刨冰、雪花冰、蕨餅、日式輕食',hours:'每日 12:00–20:00',warn:'週二休息！',addr:'白馬行龍安圍8-A號地下A座',map:'https://www.google.com/maps/search/HANO+Kakigori+Macau',lat:22.1944,lng:113.5428},
+  {id:41,name:'Neve Canelé',emoji:'🥐',cat:'dessert',region:'hk',time:['afternoon'],sig:'各款流心可麗露（伯爵茶/開心果/季節限定），外脆內軟高顏值',hours:'不定時，建議查IG @neve_canele',warn:'供應不定時，提前查詢',addr:'趙家巷10號（下環區）',map:'https://www.google.com/maps/search/Neve+Canele+Macau',lat:22.1949,lng:113.5390},
+  {id:42,name:'cotiz（南灣原店）',emoji:'🍮',cat:'dessert',region:'hk',time:['afternoon'],sig:'伯爵茶泡芙$24、竹炭黑芝麻泡芙、Oreo泡芙、可麗露，日式京都風',hours:'每日 12:00–19:00',warn:'週三休息！日日售罄，早去！',addr:'南灣大馬路343號（ICBC旁）',map:'https://www.google.com/maps/search/cotiz+南灣+澳門',lat:22.1911,lng:113.5391},
+  {id:43,name:'cotiz（葡京人旗艦）',emoji:'🍮',cat:'dessert',region:'cotai',time:['afternoon'],sig:'同招牌+義順雙皮奶軟雪糕聯名、梳乎厘班戟、Croffle',hours:'週一至四 11:00–19:00 / 週五至日 11:00–21:30',warn:null,addr:'葡京人酒店L01樓',map:'https://www.google.com/maps/search/cotiz+葡京人+澳門',lat:22.1527,lng:113.5685},
+  {id:44,name:'曼撻格利亞 Manteigaria（半島）',emoji:'🥐',cat:'dessert',region:'hk',time:['breakfast','afternoon'],sig:'葡萄牙里斯本亞洲首店，奶油味重葡撻$12/顆，配肉桂粉食',hours:'每日 08:00–20:00，全年無休',warn:null,addr:'南灣大馬路598號',map:'https://www.google.com/maps/search/Manteigaria+Macau+半島',lat:22.1923,lng:113.5413},
+  {id:45,name:'曼撻格利亞 Manteigaria（氹仔）',emoji:'🥐',cat:'dessert',region:'taipa',time:['breakfast','afternoon'],sig:'葡撻專門店氹仔分店',hours:'待確認',warn:null,addr:'氹仔舊城區',map:'https://www.google.com/maps/search/Manteigaria+Taipa+Macau',lat:22.1535,lng:113.5558},
+  {id:46,name:'澤賢記（渡船街總店）',emoji:'🧇',cat:'dessert',region:'hk',time:['afternoon'],sig:'1944年老字號，焦糖葡撻雞蛋仔（流心葡撻餡）、鹹蛋黃、紫薯口味',hours:'每日 12:00–21:00',warn:'週一休息！',addr:'渡船街一帶',map:'https://www.google.com/maps/search/澤賢記+渡船街+澳門',lat:22.1940,lng:113.5426},
+  {id:47,name:'澤賢記（官也街店）',emoji:'🧇',cat:'dessert',region:'taipa',time:['afternoon'],sig:'焦糖葡撻雞蛋仔，氹仔官也街分店',hours:'待確認',warn:null,addr:'官也街附近',map:'https://www.google.com/maps/search/澤賢記+氹仔+澳門',lat:22.1527,lng:113.5560},
+  {id:48,name:'Celeste 天羽 943 the Porte',emoji:'🍦',cat:'dessert',region:'taipa',time:['afternoon'],sig:'法式冰火葡撻（炙燒焦糖布蕾+雲尼拿雪糕+香脆葡撻）每日限量50個！',hours:'每日 12:00–19:00',warn:'週三休息！冰火葡撻每日限量50個！',addr:'氹仔飛能便度街21號地舖',map:'https://www.google.com/maps/search/Celeste+943+the+Porte+Macau',lat:22.1528,lng:113.5558},
+  {id:49,name:'甘利來餅家',emoji:'🍩',cat:'dessert',region:'taipa',time:['afternoon'],sig:'沙翁，即炸即食，外脆內軟',hours:'待確認',warn:null,addr:'氹仔',map:'https://www.google.com/maps/search/甘利來餅家+澳門',lat:22.1908,lng:113.5374},
+  {id:50,name:'Just Go (Just糕)',emoji:'🍦',cat:'gelato',region:'hk',time:['afternoon'],sig:'麻糬包Gelato（Q彈麻糬包住意式雪糕）、開心果碎、豆腐/柚子/特濃朱古力辣椒口味',hours:'約 11:00–19:30',warn:null,addr:'大三巴街附近',map:'https://www.google.com/maps/search/Just+Go+Gelato+澳門',lat:22.1910,lng:113.5391},
+  {id:51,name:'冰堂 PengTong Gelato',emoji:'🍦',cat:'gelato',region:'taipa',time:['afternoon'],sig:'氹仔人氣意式雪糕店，多款創意口味',hours:'待確認',warn:null,addr:'氹仔',map:'https://www.google.com/maps/search/PengTong+Gelato+澳門',lat:22.1528,lng:113.5558},
+  {id:52,name:'Goat Bakers（高士德）',emoji:'🥐',cat:'bread',region:'hk',time:['breakfast','afternoon'],sig:'奶酪花杯子（流心芝士醬）、彩虹牛角包（雲尼拿吉士醬）、沙翁牛角',hours:'每日 11:00–19:00',warn:'限量出爐，售完即止！',addr:'高士德永聯台52號',map:'https://www.google.com/maps/search/Goat+Bakers+澳門+高士德',lat:22.2011,lng:113.5474},
+  {id:53,name:'Goat Bakers NamWan（南環）',emoji:'🥐',cat:'bread',region:'taipa',time:['breakfast','afternoon'],sig:'同高士德店，酥皮麵包南灣分店',hours:'每日 11:00–19:00',warn:'限量售完即止',addr:'巴波沙總督街80號地下C',map:'https://www.google.com/maps/search/Goat+Bakers+NamWan+澳門',lat:22.1897,lng:113.5411},
+  {id:54,name:'大利來記豬扒包',emoji:'🥖',cat:'bread',region:'taipa',time:['breakfast','lunch','afternoon'],sig:'50年老店，柴爐烤豬扒包、豬扒菠蘿包、咖喱魚蛋',hours:'每日 09:00–18:30',warn:'下午約3:30出爐，售完即止！',addr:'告利雅施利華街35號地舖',map:'https://www.google.com/maps/search/大利來記豬扒包+氹仔+澳門',lat:22.1528,lng:113.5568},
+  {id:55,name:'PANPAN',emoji:'🥐',cat:'bread',region:'hk',time:['breakfast','afternoon'],sig:'丹麥可頌、香蕉拖肥批（banana toffee）、明太子可頌',hours:'待確認',warn:null,addr:'草堆街附近（大三巴一帶）',map:'https://www.google.com/maps/search/PANPAN+澳門+草堆街',lat:22.1960,lng:113.5398},
+  {id:56,name:'KEICA',emoji:'🥯',cat:'bread',region:'hk',time:['breakfast','afternoon'],sig:'焦糖蘋果乳酪Bagel、黑松露芝士吞拿魚Bagel、千層蛋糕',hours:'待確認',warn:null,addr:'大三巴附近',map:'https://www.google.com/maps/search/KEICA+澳門+bagel',lat:22.1959,lng:113.5402},
+  {id:57,name:'Bread Station 麵包站',emoji:'🍞',cat:'bread',region:'taipa',time:['breakfast','afternoon'],sig:'本地麵包，各款麵包',hours:'待確認',warn:null,addr:'氹仔',map:'https://www.google.com/maps/search/Bread+Station+澳門',lat:22.1905,lng:113.5407},
+  {id:58,name:'抹森 mori',emoji:'🍵',cat:'dessert',region:'taipa',time:['afternoon'],sig:'日本宇治抹茶專門店，宇治抹茶刨冰+牛乳冰淇淋、抹茶系列甜品',hours:'待確認',warn:null,addr:'氹仔',map:'https://www.google.com/maps/search/抹森+mori+澳門',lat:22.1904,lng:113.5407},
+  {id:59,name:'檸檬車露',emoji:'🍦',cat:'gelato',region:'taipa',time:['afternoon'],sig:'意大利正宗手拉雪糕，師傅現場手製，多款創意口味，官也街打卡必去',hours:'待確認',warn:null,addr:'氹仔官也街一帶',map:'https://www.google.com/maps/search/檸檬車露+意大利+雪糕+澳門',lat:22.1532,lng:113.5564},
+  {id:60,name:'紅記飯店',emoji:'🍽️',cat:'meal',region:'hk',time:['lunch','dinner'],sig:'澳門半島老字號廣東菜飯店，地道家常菜',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/紅記飯店+澳門',lat:22.2068,lng:113.5523},
+  {id:61,name:'新好利 咖啡餅店麵食',emoji:'🥐',cat:'teahouse',region:'hk',time:['breakfast','lunch'],sig:'著名蛋撻、雞尾包、奶油豬、豬扒包，澳門人早餐首選，必試葡式蛋撻',hours:'待確認',warn:null,addr:'澳門半島議事亭一帶',map:'https://www.google.com/maps/search/新好利+咖啡餅店+澳門',lat:22.1990,lng:113.5443},
+  {id:62,name:'陳勝記',emoji:'🍚',cat:'meal',region:'hk',time:['breakfast','lunch'],sig:'澳門老字號粥品，滑蛋白粥、皮蛋瘦肉粥、及第粥，傳統廣東粥底',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/陳勝記+粥+澳門',lat:22.2003,lng:113.5428},
+  {id:63,name:'六記粥麵',emoji:'🍜',cat:'meal',region:'hk',time:['lunch','dinner','supper'],sig:'老字號粥麵，艇仔粥、及第粥、魚蛋粉、牛腩麵，宵夜必去',hours:'待確認',warn:null,addr:'澳門半島新馬路一帶',map:'https://www.google.com/maps/search/六記粥麵+澳門',lat:22.1973,lng:113.5407},
+  {id:64,name:'Dudan Snacks',emoji:'🧆',cat:'supper',region:'hk',time:['afternoon','supper'],sig:'特色小食，澳門本地人氣小店',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/Dudan+Snacks+澳門',lat:22.1952,lng:113.5468},
+  {id:65,name:'文記滾蛋小食',emoji:'🥚',cat:'supper',region:'hk',time:['supper'],sig:'滾蛋系列炸小食，即炸即食，澳門特色街頭美食',hours:'傍晚至深夜',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/文記滾蛋小食+澳門',lat:22.1967,lng:113.5393},
+  {id:66,name:'滾蛋小食第二分店',emoji:'🥚',cat:'supper',region:'hk',time:['supper'],sig:'文記滾蛋第二分店，同款炸小食',hours:'傍晚至深夜',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/滾蛋小食+第二分店+澳門',lat:22.2013,lng:113.5434},
+  {id:67,name:'麵仔美食',emoji:'🍜',cat:'meal',region:'hk',time:['lunch','dinner'],sig:'地道麵食小店，澳門本地人愛去',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/麵仔美食+澳門',lat:22.2007,lng:113.5419},
+  {id:68,name:'肥仔文美食',emoji:'🍛',cat:'meal',region:'hk',time:['lunch','dinner','supper'],sig:'澳門本地小食，地道風味',hours:'待確認',warn:null,addr:'澳門半島',map:'https://www.google.com/maps/search/肥仔文美食+澳門',lat:22.1976,lng:113.5416},
+];
+
+const CAT_LABELS={teahouse:'茶餐廳',meal:'正餐/粥麵',portuguese:'葡國菜',hotpot:'火鍋/煲',supper:'宵夜/小食',bbq:'燒烤',bread:'麵包/Bagel',cafe:'Cafe/飲品',dessert:'甜點',gelato:'Gelato'};
+const REG_LABELS={hk:'澳門半島',taipa:'氹仔舊城',cotai:'路氹城'};
+const CAT_COLORS={teahouse:'#c9952a',meal:'#3a7d52',portuguese:'#c0503a',hotpot:'#2e5f8a',supper:'#7a4a8a',bbq:'#c06030',bread:'#7a8a20',cafe:'#207070',dessert:'#c04070',gelato:'#204090'};
+
+// ── SECTION SWITCH ─────────────────────────────
+window.showSection=function(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='map'){
+    setTimeout(()=>{
+      buildMapPins();
+      if(leafletMap) leafletMap.invalidateSize();
+    },80);
+  }
+}
+
+// ── LEAFLET MAP ────────────────────────────────
+let leafletMap=null, clusterGroup=null, allMarkers=[];
+
+function initLeafletMap(){
+  if(leafletMap) return;
+  leafletMap=L.map('leaflet-map',{
+    center:[22.185,113.548],
+    zoom:14,
+    zoomControl:true
+  });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom:19
+  }).addTo(leafletMap);
+
+  clusterGroup=L.markerClusterGroup({
+    chunkedLoading:true,
+    maxClusterRadius:45,
+    iconCreateFunction:function(cluster){
+      const count=cluster.getChildCount();
+      return L.divIcon({
+        html:`<div style="background:var(--navy);color:var(--gold-light);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,0.25);font-family:'Noto Sans HK',sans-serif">${count}</div>`,
+        className:'',iconSize:[36,36],iconAnchor:[18,18]
+      });
+    }
+  });
+
+  PLACES.forEach(p=>{
+    const col=CAT_COLORS[p.cat]||'#888';
+    const icon=L.divIcon({
+      html:`<div class="marker-pin" style="background:${col};width:36px;height:36px;">${p.emoji}</div>`,
+      className:'',iconSize:[36,36],iconAnchor:[18,18],popupAnchor:[0,-20]
+    });
+    const marker=L.marker([p.lat,p.lng],{icon});
+    marker.bindPopup(`
+      <div class="popup-inner">
+        <div class="popup-name">${p.emoji} ${p.name}</div>
+        <div class="popup-sig">${p.sig}</div>
+        <div class="popup-hours">🕐 ${p.hours}</div>
+        ${p.warn?`<div class="popup-warn">⚠️ ${p.warn}</div>`:''}
+        <a class="popup-link" href="${p.map}" target="_blank">📍 Google Maps →</a>
+      </div>`,{maxWidth:260,minWidth:220});
+    marker._placeId=p.id;
+    allMarkers.push(marker);
+    clusterGroup.addLayer(marker);
+  });
+  leafletMap.addLayer(clusterGroup);
+
+  // Build legend
+  const legend=document.getElementById('map-legend');
+  Object.entries(CAT_LABELS).forEach(([k,v])=>{
+    const el=document.createElement('div');
+    el.className='legend-item';
+    el.innerHTML=`<span class="legend-dot" style="background:${CAT_COLORS[k]}"></span>${v}`;
+    legend.appendChild(el);
+  });
+}
+
+function updateMapMarkers(filtered){
+  if(!clusterGroup) return;
+  const ids=new Set(filtered.map(p=>p.id));
+  clusterGroup.clearLayers();
+  allMarkers.forEach(m=>{
+    if(ids.has(m._placeId)) clusterGroup.addLayer(m);
+  });
+}
+
+function buildMapPins(){
+  const filtered=getFiltered();
+  if(!leafletMap){ initLeafletMap(); }
+  else { updateMapMarkers(filtered); }
+  buildFoodCards(filtered);
+  document.getElementById('map-count').textContent=`顯示 ${filtered.length} 個地點`;
+}
+
+// ── UNIFIED FILTER STATE ───────────────────────
+let mRegion='all',mCat='all',mTime='all';
+
+window.setMapFilter=function(type,val,btn){
+  const panel=btn.closest('.filter-panel');
+  panel.querySelectorAll('.filter-btn').forEach(b=>{
+    if(b.getAttribute('onclick')?.includes(`'${type}'`)) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  if(type==='region') mRegion=val;
+  else if(type==='cat') mCat=val;
+  else mTime=val;
+  buildMapPins();
+}
+
+function getFiltered(){
+  return PLACES.filter(p=>{
+    if(mRegion!=='all'&&p.region!==mRegion) return false;
+    if(mCat!=='all'&&p.cat!==mCat) return false;
+    if(mTime!=='all'&&!p.time.includes(mTime)) return false;
+    return true;
+  });
+}
+
+// ── FOCUS MAP PIN ──────────────────────────────
+window.focusMapPin=function(id){
+  const marker=allMarkers.find(m=>m._placeId===id);
+  if(!marker||!leafletMap||!clusterGroup) return;
+  // Scroll map into view (account for sticky nav ~60px)
+  const mapEl=document.getElementById('leaflet-map');
+  const y=mapEl.getBoundingClientRect().top+window.scrollY-70;
+  window.scrollTo({top:y,behavior:'smooth'});
+  // Uncluster + open popup, cap zoom at 16
+  clusterGroup.zoomToShowLayer(marker,()=>{
+    if(leafletMap.getZoom()>16) leafletMap.setZoom(16,{animate:false});
+    marker.openPopup();
+  });
+};
+
+// ── FOOD GRID ──────────────────────────────────
+function buildFoodCards(filtered){
+  const grid=document.getElementById('map-pins-grid');
+  if(!filtered.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-light)">😅 冇符合條件嘅地方，試下其他篩選</div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(p=>`
+    <div class="food-card${p.warn?' ribbon':''}" ${p.warn?`data-ribbon="⚠️"`:''}>
+      <div class="food-card-top">
+        <div><div class="food-card-name">${p.name}</div><div class="food-card-catname">${CAT_LABELS[p.cat]||''}</div></div>
+        <div class="food-card-emoji">${p.emoji}</div>
+      </div>
+      <div class="food-card-tags">
+        <span class="food-tag r-${p.region}">${REG_LABELS[p.region]}</span>
+        <span class="food-tag c-${p.cat}">${CAT_LABELS[p.cat]||''}</span>
+      </div>
+      <div class="food-sig">${p.sig}</div>
+      <div class="food-hours">🕐 ${p.hours}</div>
+      ${p.warn?`<div class="food-warn">⚠️ ${p.warn}</div>`:''}
+      <div class="food-bottom">
+        <a class="map-link" href="${p.map}" target="_blank">📍 Google Maps</a>
+        <button class="map-focus-btn" onclick="focusMapPin(${p.id})">🗺️ 在地圖查看</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── MCC LIST (CATEGORISED) ─────────────────────
+const MCC_CATS=[
+  {id:'skincare',label:'護膚',emoji:'💧',items:[
+    '洗面巾巾','Cotton pad','Cotton stick','Make up remover',
+    'Cleaning','Toner','Eye cream','Serum','Cream','Towel',
+    'Sunscreen'
+  ]},
+  {id:'makeup',label:'化妝',emoji:'💄',items:[
+    'Foundation','Pokpok','Powder','Concealer + Brush',
+    'Cheek','Eyeshadow','Eyepen + Eyeliner','Eyebrow'
+  ]},
+  {id:'hair',label:'頭髮',emoji:'💇',items:[
+    'Hair oil','Ribbon','Hair assy'
+  ]},
+  {id:'other',label:'其他',emoji:'🎒',items:[
+    'Tissue','Wet tissue','WC tissue','Miffy tray','Con','Sleep wear','洗浴缸滴露'
+  ]}
+];
+
+// Flatten for global index
+const MCC_FLAT=[];
+MCC_CATS.forEach(cat=>cat.items.forEach(item=>MCC_FLAT.push({cat:cat.id,label:item})));
+const TOTAL=MCC_FLAT.length;
+const mccState={};
+
+function buildMCC(){
+  const wrap=document.getElementById('mcc-sections');
+  wrap.innerHTML='';
+  let globalIdx=0;
+  MCC_CATS.forEach(cat=>{
+    const section=document.createElement('div');
+    section.className='mcc-section';
+    const header=document.createElement('div');
+    header.className='mcc-cat-header';
+    header.innerHTML=`<span class="mcc-cat-emoji">${cat.emoji}</span><span class="mcc-cat-label">${cat.label}</span><span class="mcc-cat-count">${cat.items.length} 件</span>`;
+    section.appendChild(header);
+    const grid=document.createElement('div');
+    grid.className='mcc-grid';
+    cat.items.forEach(item=>{
+      const idx=globalIdx++;
+      const checked=mccState[idx]||false;
+      const el=document.createElement('div');
+      el.className='mcc-item'+(checked?' checked':'');
+      el.innerHTML=`<div class="mcc-checkbox">${checked?'✓':''}</div><div class="mcc-label">${item}</div>`;
+      el.onclick=()=>toggleMCC(idx,el);
+      grid.appendChild(el);
+    });
+    section.appendChild(grid);
+    wrap.appendChild(section);
+  });
+  updateMCCProgress();
+}
+
+window.toggleMCC=function(idx,el){
+  const isChecked=!el.classList.contains('checked');
+  mccState[idx]=isChecked;
+  el.classList.toggle('checked',isChecked);
+  el.querySelector('.mcc-checkbox').textContent=isChecked?'✓':'';
+  updateMCCProgress();
+}
+
+function updateMCCProgress(){
+  const done=Object.values(mccState).filter(Boolean).length;
+  const pct=Math.round(done/TOTAL*100);
+  document.getElementById('mcc-bar').style.width=pct+'%';
+  document.getElementById('mcc-progress-text').textContent=`${done} / ${TOTAL} packed`;
+}
+
+window.resetMCC=function(){
+  MCC_FLAT.forEach((_,i)=>mccState[i]=false);
+  buildMCC();
+}
+
+// ── INIT ──────────────────────────────────────
+buildMCC();
+</script>
+</body>
+</html>
